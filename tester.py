@@ -3,8 +3,6 @@
 from econ_sim.Simulation import Simulation
 from econ_sim.Resources import Brick, Wool, Ore
 
-import pdb
-
 def example1():
     sim = Simulation()
     b = Brick(sim)
