@@ -1,7 +1,12 @@
 #!/usr/bin/python
 
+import sys
+
 from econ_sim.Simulation import Simulation
 from econ_sim.Resources import Brick, Wool, Ore
+from econ_sim.Inventory import Inventory
+
+import numpy as np
 
 def example1():
     sim = Simulation()
@@ -15,50 +20,45 @@ def example1():
 
 def example2():
     sim = Simulation()
+    inv = Inventory()
 
-    def print_net_worth(bnk):
-        total = 0
-        for res, supply in bnk.iteritems():
-            subtotal = sum( [x.value for x in supply] )
-            total += subtotal
-            print "{}:\t {}".format(res, subtotal)
-        print '--------------'
-        print 'total:\t {}\n'.format(total)
+    inv.deposit(Brick(sim))
+    inv.deposit(Brick(sim))
+    inv.deposit(Brick(sim))
+    inv.deposit(Wool(sim))
 
-    # Show a collection of resources. Could create a class for this, to manage
-    # acquisition, access and spending of your resources
-    bank = { r: [] for r in ('brick', 'wool', 'ore')}
-
-    bank['brick'].append(Brick(sim))
-    bank['brick'].append(Brick(sim))
-    bank['wool'].append(Wool(sim))
-
-    print_net_worth(bank)
-    sim.ticktock()
-    print '========'
-
-    bank['brick'].append(Brick(sim))
-    bank['wool'].append(Wool(sim))
-    bank['ore'].append(Ore(sim))
-
-    print_net_worth(bank)
+    inv.print_net_worth()
     sim.ticktock()
 
-    bank['brick'].append(Brick(sim))
-    bank['brick'].append(Brick(sim))
-    bank['ore'].append(Ore(sim))
+    inv.deposit(Brick(sim))
+    inv.deposit(Wool(sim))
+    inv.deposit(Ore(sim))
+
+    inv.print_net_worth()
+    sim.ticktock()
+
+    inv.withdraw('Brick', n=3)
+    inv.withdraw('Wool')
+
+    inv.deposit(Brick(sim))
+    inv.deposit(Brick(sim))
+    inv.deposit(Ore(sim))
+
+    inv.print_net_worth()
+    sim.ticktock()
 
 
-    # Watch our wool go bad! Guess it costs to dispose of. Its depreciation
-    # function should really hit a floor
     for _ in range(10):
         sim.ticktock(20)
-        print_net_worth(bank)
+        inv.print_net_worth()
 
+    print "============="
+
+    inv.plot_balance_history()
 
 
 if __name__ == '__main__':
-    example1()
+    #example1()
 
     print "\n========\n"
 
