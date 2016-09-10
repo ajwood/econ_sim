@@ -25,9 +25,11 @@ class Resource(object):
 
     @property
     def value(self):
-        return self.base_value + self.depreciation_func( self.age )
+        return max( 0, self.base_value + self.depreciation_func( self.age ) * 20)
 
     def __str__(self):
+        return type(self).__name__.lower()
+    def __repr__(self): # FIXME remove
         return type(self).__name__.lower()
 
 

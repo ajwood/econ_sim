@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
 import sys
+import random
 
 from econ_sim.Simulation import Simulation
-from econ_sim.Resources import Brick, Wool, Ore
+from econ_sim.Resources import Brick, Wool, Ore, Wood
 from econ_sim.Inventory import Inventory
 
 import numpy as np
@@ -56,12 +57,39 @@ def example2():
 
     inv.plot_balance_history()
 
+def example3():
+    sim = Simulation()
+    inv = Inventory()
+
+    for n in range(10000):
+        n_in  = random.randint(0, 15)
+        n_out = random.randint(0, 15)
+
+        # Acquire new resources
+        resources = [ Brick, Wool, Ore, Wood ]
+        for _ in range(n_in):
+            res = random.choice(resources)
+            inv.deposit( res(sim) )
+
+        # Ditch some old resources
+        resources = inv.inventory.keys()
+        if len(resources) > 0:
+            withdraw = { r: 0 for r in resources }
+            for _ in range(n_out):
+                res = random.choice(resources)
+                withdraw[res] += 1
+            inv.withdraw(withdraw)
+
+        inv.update_balance()
+        sim.ticktock()
+
+    inv.plot_balance_history()
+
 
 if __name__ == '__main__':
     #example1()
 
-    print "\n========\n"
+    #example2()
 
-    example2()
-
+    example3()
 
