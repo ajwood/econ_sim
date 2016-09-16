@@ -18,6 +18,7 @@ def example1():
         print "{} o'clock -- My {} is worth {}".format(sim.now, b, b.value)
         sim.ticktock()
 
+# Test comment by Robbie on 2016-09-16
 
 def example2():
     sim = Simulation()
